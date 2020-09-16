@@ -19,14 +19,22 @@ class App extends Component {
       return false;
     }
 
-    const fr = new FileReader();
-    fr.onload = (e) => {
-      const result = JSON.parse(e.target.result);
-      this.setState({
-        data: result
-      });
+    const ext = 'json'
+    const fileName = files[0].name;
+    let file_ext = fileName.split('.');
+    if (file_ext[file_ext.length - 1].toLowerCase() === ext.toLowerCase()) {
+      console.log(true);
+      const fr = new FileReader();
+      fr.onload = (e) => {
+        const result = JSON.parse(e.target.result);
+        this.setState({
+          data: result
+        });
+      }
+      fr.readAsText(files.item(0));
+    } else {
+      console.log(false);
     }
-    fr.readAsText(files.item(0));
   }
 
   render(){
