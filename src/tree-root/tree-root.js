@@ -23,38 +23,37 @@ class TreeRoot extends Component {
         return Object
             .entries(object)
             .map(([key, value]) => value && typeof value === 'object'
-                ? { title: key, key, children: this.getNodes(value) }
-                : { title: key, key, value }
+                // ? { key, children: this.getNodes(value) }
+                // : { key, value }
+                ? (
+                    <div className="hasChildren">
+                        <div className="treeRoot">
+                            <FaMinusSquare className="inline-icon" /> 
+                            <span>{key}</span>
+                        </div>
+                        {this.getNodes(value)}
+                    </div>
+                )
+                : (
+                    <div className="hasChildren">
+                        <div className="treeRoot">
+                            <FaMinusSquare className="inline-icon" /> 
+                            {typeof key === 'string' && isNaN(key) ?
+                                <span>{key}: </span> : null
+                            }
+                            <span>{value}</span>
+                        </div>
+                    </div>
+                )
             );
     }
 
     render(){
-        if(this.props.data){
-            console.log(this.getNodes(this.props.data));
-            this.getNodes(this.props.data);
-        }
-        
         const { data } = this.props;
-        let entries;
 
         if(data){
-            entries = Object.entries(data);
-            entries = entries[0];
-            let rootItem = [];
-            for (let [index, item] in entries[1]) {
-                if (data.hasOwnProperty(item)) {
-                    let itemKey = Object.keys(item);
-                    rootItem.push(
-                        <div key={index}>{itemKey[0]}</div>
-                    );
-                }
-            }
-            return(
-                <div className="treeRoot">
-                    <FaMinusSquare className="inline-icon" /> 
-                    <span>{entries[0]}</span>
-                </div>
-            );
+            let nodes = this.getNodes(this.props.data);
+            return nodes;
         }
         return null;
     }

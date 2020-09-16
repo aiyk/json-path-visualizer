@@ -25,6 +25,7 @@ class App extends Component {
       this.setState({
         data: result
       });
+      console.log(result);
     }
     fr.readAsText(files.item(0));
   }
