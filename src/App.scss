@@ -72,3 +72,35 @@
   overflow-y: auto;
   margin: 10px 0;
 }
+
+
+
+.jsonRenderer__error{
+  position: absolute;
+  top: -100rem;
+  right: 2rem;
+  border-radius: .5rem;
+  width: auto;
+  padding: 10px;
+  -webkit-animation: slide 1s forwards;
+  animation: slide 1s forwards;
+  z-index: 10;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.14);
+  background: var(--error-bg);
+  color: var(--error);
+  border: .05rem solid var(--error);
+  .jsonRenderer__error__title{
+    font-weight: 500;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+  }
+}
+
+
+@-webkit-keyframes slide {
+  100% { top: 20px; }
+}
+
+@keyframes slide {
+  100% { top: 20px; }
+}
