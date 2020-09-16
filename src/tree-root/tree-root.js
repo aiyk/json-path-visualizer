@@ -1,16 +1,29 @@
 import React, {Component} from 'react';
 import './tree-root.scss';
-import { FaMinusSquare, FaPlusSquare } from 'react-icons/fa';
+import { FaAutoprefixer, FaMinusSquare, FaPlusSquare } from 'react-icons/fa';
 
 class TreeRoot extends Component {
-    state = {}
+
+    handleCollapse = (e) => {
+        e.persist();
+        e.stopPropagation();
+        console.log(e.currentTarget.id);
+    }
+
+    generateKey = (knowns) => {
+        return knowns +'_'+ Math.random();
+    }
 
     getNodes(object) {
         return Object
             .entries(object)
             .map(([key, value], index) => value && typeof value === 'object'
                 ? (
-                    <div key={index} className="hasChildren">
+                    <div 
+                        onClick={this.handleCollapse} 
+                        id={this.generateKey(key + '_' + value[0] + '_' + index)} 
+                        key={this.generateKey(key + '_' + value[0] + '_' + index, true)} 
+                        className="hasChildren">
                         <div className="treeRoot">
                             <FaMinusSquare className="inline-icon" /> 
                             <span>{key}</span>
@@ -19,7 +32,7 @@ class TreeRoot extends Component {
                     </div>
                 )
                 : (
-                    <div key={index} className="hasChildren">
+                    <div onClick={this.handleCollapse} id={this.generateKey(key + '_' + value[0] + '_' + index)} key={this.generateKey(key + '_' + value[0] + '_' + index, true)} className="hasChildren">
                         <div className="treeRoot">
                             <FaMinusSquare className="inline-icon" /> 
                             {typeof key === 'string' && isNaN(key) ?

@@ -2,6 +2,8 @@
     padding-left: 20px;
     // border: 1px solid var(--theme-light-border-color);
     width: 100%;
+    height: 40px;
+    overflow: hidden;
 }
 .hasChildren .treeRoot{}
 .treeRoot{
