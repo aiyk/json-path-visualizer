@@ -92,10 +92,11 @@
   background: var(--error-bg);
   color: var(--error);
   border: .05rem solid var(--error);
+  font-size: 14px;
   .jsonRenderer__error__title{
     font-weight: 500;
     margin-bottom: .5rem;
-    font-size: 1.2rem;
+    font-size: 12px;
   }
 }
 
