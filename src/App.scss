@@ -75,6 +75,9 @@
 
 
 
+/*****    *****   *****   *****   *****/
+
+/*****    *****  error notification  *****   *****/
 .jsonRenderer__error{
   position: absolute;
   top: -100rem;
@@ -91,7 +94,7 @@
   border: .05rem solid var(--error);
   .jsonRenderer__error__title{
     font-weight: 500;
-    margin-bottom: 1rem;
+    margin-bottom: .5rem;
     font-size: 1.2rem;
   }
 }
