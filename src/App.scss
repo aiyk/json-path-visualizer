@@ -71,6 +71,7 @@
   width: 100%;
   overflow-y: auto;
   margin: 10px 0;
+  background-color: var(--theme-light-hover-color);
 }
 
 
@@ -107,4 +108,29 @@
 
 @keyframes slide {
   100% { top: 20px; }
+}
+
+
+/* **** ***** nice scrollbar  ***** ***** */
+
+.nice-scroll::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 .6rem rgba(0, 0, 0, 0.1);
+  background-color: #ebebeb;
+}
+
+.nice::-webkit-scrollbar {
+  width: 1.2rem;
+  background-color: #f0f4f7;
+  visibility: visible;
+}
+
+.nice::-webkit-scrollbar-thumb {
+  border-radius: 1rem;
+  -webkit-box-shadow: inset 0 0 .6rem rgba(0, 0, 0, .1);
+  background-color: #d6d6d6;
+  visibility: visible;
+}
+
+.scroll__parent:hover .nice-scroll::-webkit-scrollbar-track, .scroll__parent:hover .nice::-webkit-scrollbar, .scroll__parent:hover .nice::-webkit-scrollbar-thumb {
+  visibility: visible;
 }

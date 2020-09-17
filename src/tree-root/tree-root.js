@@ -1,13 +1,17 @@
 import React, {Component} from 'react';
 import './tree-root.scss';
-import { FaAutoprefixer, FaMinusSquare, FaPlusSquare } from 'react-icons/fa';
+import { FaMinusSquare, FaPlusSquare } from 'react-icons/fa';
 
 class TreeRoot extends Component {
 
     handleCollapse = (e) => {
         e.persist();
         e.stopPropagation();
-        console.log(e.currentTarget.id);
+        if(e.currentTarget.className.includes('--opened')){
+            e.currentTarget.className = ' hasChildren';
+        } else {
+            e.currentTarget.className += ' hasChildren--opened';
+        }
     }
 
     generateKey = (knowns) => {
