@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.scss';
 import { FaUpload } from 'react-icons/fa';
 import TreeRoot from './tree-root/tree-root'
+import {JSONPath} from 'jsonpath-plus';
 
 class App extends Component {
   state = {
@@ -11,7 +12,9 @@ class App extends Component {
 
   handleFilterChange = (e) => {
     const val = e.target.value;
-    console.log(val);
+    const result = JSONPath({path: val.trim(), json: this.state.data});
+    console.log(val, result);
+    // var response = jsonPath(store , "$..author")
   }
 
   handleUploadChange = (e) => { 

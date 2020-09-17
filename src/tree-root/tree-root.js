@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './tree-root.scss';
-import { FaMinusSquare, FaPlusSquare } from 'react-icons/fa';
 
 class TreeRoot extends Component {
 
@@ -12,6 +11,17 @@ class TreeRoot extends Component {
         } else {
             e.currentTarget.className += ' hasChildren--opened';
         }
+        
+        let plusIcon = e.currentTarget.querySelector('.plus');
+        let minusIcon = e.currentTarget.querySelector('.minus');
+
+        if(plusIcon){
+            plusIcon.className = 'minus';
+        }
+        if(minusIcon){
+            minusIcon.className = 'plus';
+        }
+        
     }
 
     generateKey = (knowns) => {
@@ -29,16 +39,15 @@ class TreeRoot extends Component {
                         key={this.generateKey(key + '_' + value[0] + '_' + index, true)} 
                         className="hasChildren">
                         <div className="treeRoot">
-                            <FaMinusSquare className="inline-icon" /> 
+                            <div className="plus"></div>
                             <span>{key}</span>
                         </div>
                         {this.getNodes(value)}
                     </div>
                 )
                 : (
-                    <div onClick={this.handleCollapse} id={this.generateKey(key + '_' + value[0] + '_' + index)} key={this.generateKey(key + '_' + value[0] + '_' + index, true)} className="hasChildren">
+                    <div onClick={this.handleCollapse} id={this.generateKey(key + '_' + value[0] + '_' + index)} key={this.generateKey(key + '_' + value[0] + '_' + index, true)} className="hasChildren lastNode">
                         <div className="treeRoot">
-                            <FaMinusSquare className="inline-icon" /> 
                             {typeof key === 'string' && isNaN(key) ?
                                 <span className="treeRoot__hasKey">{key}: </span> : null
                             }
