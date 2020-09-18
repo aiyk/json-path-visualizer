@@ -30,12 +30,12 @@ class TreeRoot extends Component {
 
     getParentNode = (key, value, index) => {
         const { selectedValues } = this.props;
-        let className = "hasChildren";
+        let className = "hasChildren hasChildren--opened";
 
         if(selectedValues){
             for(var i = 0; i < selectedValues.length; i++) {
                 if (selectedValues[i].key === key || selectedValues[i].value === value) {
-                    className += ' highlightedNode';
+                    className += ' highlightedNode hasChildren--opened';
                     break;
                 }
             }
@@ -48,7 +48,7 @@ class TreeRoot extends Component {
                 key={this.generateKey(key + '_' + value[0] + '_' + index, true)} 
                 className={className}>
                 <div className="treeRoot">
-                    <div className="plus"></div>
+                    <div className="minus"></div>
                     <span>{key}</span>
                 </div>
                 {this.getNodes(value)}
@@ -58,7 +58,7 @@ class TreeRoot extends Component {
 
     getChildNode = (key, value, index) => {
         const { selectedValues } = this.props;
-        let className = 'hasChildren lastNode';
+        let className = 'hasChildren lastNode hasChildren--opened';
 
         if(selectedValues){
             for(var i = 0; i < selectedValues.length; i++) {
