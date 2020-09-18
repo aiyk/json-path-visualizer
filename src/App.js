@@ -12,9 +12,22 @@ class App extends Component {
 
   handleFilterChange = (e) => {
     const val = e.target.value;
-    const result = JSONPath({path: val.trim(), json: this.state.data});
-    console.log(val, result);
-    // var response = jsonPath(store , "$..author")
+    JSONPath({path: val.trim(), json: this.state.data, callback: (val, key, payload)=> {
+      let path = payload.path.split("[");
+      path.pop();
+      path = path.join('[');
+      path = path.split("$");
+      path = path.join('');
+      
+      let update = payload.parent;
+      update.selected_queried_node_active = true;
+      let temp = {...this.state.data};
+      temp.store.book[3] = update;
+
+      this.setState({
+        data: temp
+      });
+    }});
   }
 
   handleUploadChange = (e) => { 

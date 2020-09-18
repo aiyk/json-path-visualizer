@@ -28,23 +28,35 @@ class TreeRoot extends Component {
         return knowns +'_'+ Math.random();
     }
 
+    getParentNode = (key, value, index) => {
+        let className = "hasChildren";
+        if(key === 'selected_queried_node_active' && value === true){
+            className += " highlightedNode"
+        }
+        if(key === 'selected_queried_node_active'){
+            return null;
+        } else {
+            return (
+                <div 
+                    onClick={this.handleCollapse} 
+                    id={this.generateKey(key + '_' + value[0] + '_' + index)} 
+                    key={this.generateKey(key + '_' + value[0] + '_' + index, true)} 
+                    className={className}>
+                    <div className="treeRoot">
+                        <div className="plus"></div>
+                        <span>{key}</span>
+                    </div>
+                    {this.getNodes(value)}
+                </div>
+            )
+        }
+    }
+
     getNodes(object) {
         return Object
             .entries(object)
             .map(([key, value], index) => value && typeof value === 'object'
-                ? (
-                    <div 
-                        onClick={this.handleCollapse} 
-                        id={this.generateKey(key + '_' + value[0] + '_' + index)} 
-                        key={this.generateKey(key + '_' + value[0] + '_' + index, true)} 
-                        className="hasChildren">
-                        <div className="treeRoot">
-                            <div className="plus"></div>
-                            <span>{key}</span>
-                        </div>
-                        {this.getNodes(value)}
-                    </div>
-                )
+                ? this.getParentNode(key, value, index)
                 : (
                     <div onClick={this.handleCollapse} id={this.generateKey(key + '_' + value[0] + '_' + index)} key={this.generateKey(key + '_' + value[0] + '_' + index, true)} className="hasChildren lastNode">
                         <div className="treeRoot">
