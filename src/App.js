@@ -13,17 +13,22 @@ class App extends Component {
   }
 
   handleFilterChange = (e) => {
-    this.setState({isLoading: true});
-    const val = e.target.value;
-    let selectedValues = [];
-    JSONPath({path: val.trim(), json: this.state.data, callback: (val, key, payload)=> {
-      selectedValues.push({
-        key: key,
-        value: val
-      })
-    }});
-    this.setState({selectedValues: selectedValues});
-    this.setState({isLoading: false});
+    // this.setState({isLoading: true});
+    let timer;
+      let _self = this;
+      const val = e.target.value;
+      let selectedValues = [];
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        JSONPath({path: val.trim(), json: _self.state.data, callback: (val, key, payload)=> {
+          selectedValues.push({
+            key: key,
+            value: val
+          })
+        }});
+        _self.setState({selectedValues: selectedValues});
+      }, 1000);
+    // this.setState({isLoading: false});
   }
 
   handleUploadChange = (e) => { 

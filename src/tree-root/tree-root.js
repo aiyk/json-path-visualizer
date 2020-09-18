@@ -35,7 +35,7 @@ class TreeRoot extends Component {
         if(selectedValues){
             for(var i = 0; i < selectedValues.length; i++) {
                 if (selectedValues[i].key === key || selectedValues[i].value === value) {
-                    className += ' highlightedNode hasChildren--opened';
+                    className += ' highlightedNode';
                     break;
                 }
             }
@@ -91,7 +91,7 @@ class TreeRoot extends Component {
     }
 
     render(){
-        const { data, isLoading } = this.props;
+        const { data } = this.props;
 
         if(data){
             // isLoading(true);
