@@ -70,7 +70,7 @@ class TreeRoot extends Component {
         }
 
         return(
-            <div onClick={this.handleCollapse} id={this.generateKey(key + '_' + value[0] + '_' + index)} key={this.generateKey(key + '_' + value[0] + '_' + index, true)} className={className}>
+            <div onClick={this.handleCollapse} id={this.generateKey(key + '_'+ index)} key={this.generateKey(key + '_'+ index, true)} className={className}>
                 <div className="treeRoot">
                     {typeof key === 'string' && isNaN(key) ?
                         <span className="treeRoot__hasKey">{key}: </span> : null
@@ -91,12 +91,14 @@ class TreeRoot extends Component {
     }
 
     render(){
-        const { data } = this.props;
+        const { data, isLoading } = this.props;
 
         if(data){
+            // isLoading(true);
             let nodes = this.getNodes(data);
             return nodes;
         }
+        // isLoading(false);
         return null;
     }
 }

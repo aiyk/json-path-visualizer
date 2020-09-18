@@ -8,10 +8,12 @@ class App extends Component {
   state = {
     data: null,
     selectedValues: null,
+    isLoading: false,
     error: false
   }
 
   handleFilterChange = (e) => {
+    this.setState({isLoading: true});
     const val = e.target.value;
     let selectedValues = [];
     JSONPath({path: val.trim(), json: this.state.data, callback: (val, key, payload)=> {
@@ -21,11 +23,14 @@ class App extends Component {
       })
     }});
     this.setState({selectedValues: selectedValues});
+    this.setState({isLoading: false});
   }
 
   handleUploadChange = (e) => { 
+    this.setState({isLoading: true});
     const files = e.target.files;   
     if (files.length <= 0) {
+      this.setState({isLoading: false});
       return false;
     }
 
@@ -38,6 +43,7 @@ class App extends Component {
         const result = JSON.parse(e.target.result);
         this.setState({
           data: result,
+          isLoading: false,
           error: false
         });
       }
@@ -45,6 +51,7 @@ class App extends Component {
     } else {
       this.setState({
         data: null,
+        isLoading: false,
         error: true
       });
 
@@ -54,11 +61,18 @@ class App extends Component {
       timer = setTimeout(() => {
         _self.setState({
           data: null,
+          isLoading: false,
           error: false
         });
       }, 4000);
       
     }
+  }
+
+  isLoading = (state) => {
+    this.setState({
+      isLoading: state
+    });
   }
 
   render(){
@@ -71,9 +85,11 @@ class App extends Component {
           </div> : null
         }
 
+        {this.state.isLoading ? <div className="loader"></div> : null}
+
         <input type="text" onChange={this.handleFilterChange} className="jsonRenderer__filter" placeholder="type in your query..." />
         <div className="jsonRenderer__contentArea nice nice-scroll">
-          <TreeRoot selectedValues={this.state.selectedValues} data={this.state.data} />
+          <TreeRoot isLoading={this.isLoading} selectedValues={this.state.selectedValues} data={this.state.data} />
         </div>
 
         <label className="jsonRenderer__uploadBtn">
