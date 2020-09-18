@@ -7,27 +7,20 @@ import {JSONPath} from 'jsonpath-plus';
 class App extends Component {
   state = {
     data: null,
+    selectedValues: null,
     error: false
   }
 
   handleFilterChange = (e) => {
     const val = e.target.value;
+    let selectedValues = [];
     JSONPath({path: val.trim(), json: this.state.data, callback: (val, key, payload)=> {
-      let path = payload.path.split("[");
-      path.pop();
-      path = path.join('[');
-      path = path.split("$");
-      path = path.join('');
-      
-      let update = payload.parent;
-      update.selected_queried_node_active = true;
-      let temp = {...this.state.data};
-      temp.store.book[3] = update;
-
-      this.setState({
-        data: temp
-      });
+      selectedValues.push({
+        key: key,
+        value: val
+      })
     }});
+    this.setState({selectedValues: selectedValues});
   }
 
   handleUploadChange = (e) => { 
@@ -80,7 +73,7 @@ class App extends Component {
 
         <input type="text" onChange={this.handleFilterChange} className="jsonRenderer__filter" placeholder="type in your query..." />
         <div className="jsonRenderer__contentArea nice nice-scroll">
-          <TreeRoot data={this.state.data} />
+          <TreeRoot selectedValues={this.state.selectedValues} data={this.state.data} />
         </div>
 
         <label className="jsonRenderer__uploadBtn">

@@ -29,44 +29,64 @@ class TreeRoot extends Component {
     }
 
     getParentNode = (key, value, index) => {
+        const { selectedValues } = this.props;
         let className = "hasChildren";
-        if(key === 'selected_queried_node_active' && value === true){
-            className += " highlightedNode"
+
+        if(selectedValues){
+            for(var i = 0; i < selectedValues.length; i++) {
+                if (selectedValues[i].key === key || selectedValues[i].value === value) {
+                    className += ' highlightedNode';
+                    break;
+                }
+            }
         }
-        if(key === 'selected_queried_node_active'){
-            return null;
-        } else {
-            return (
-                <div 
-                    onClick={this.handleCollapse} 
-                    id={this.generateKey(key + '_' + value[0] + '_' + index)} 
-                    key={this.generateKey(key + '_' + value[0] + '_' + index, true)} 
-                    className={className}>
-                    <div className="treeRoot">
-                        <div className="plus"></div>
-                        <span>{key}</span>
-                    </div>
-                    {this.getNodes(value)}
+        
+        return (
+            <div 
+                onClick={this.handleCollapse} 
+                id={this.generateKey(key + '_' + value[0] + '_' + index)} 
+                key={this.generateKey(key + '_' + value[0] + '_' + index, true)} 
+                className={className}>
+                <div className="treeRoot">
+                    <div className="plus"></div>
+                    <span>{key}</span>
                 </div>
-            )
-        }
+                {this.getNodes(value)}
+            </div>
+        )
     }
 
-    getNodes(object) {
+    getChildNode = (key, value, index) => {
+        const { selectedValues } = this.props;
+        let className = 'hasChildren lastNode';
+
+        if(selectedValues){
+            for(var i = 0; i < selectedValues.length; i++) {
+                if (selectedValues[i].key === key || selectedValues[i].value === value) {
+                    className += ' highlightedNode';
+                    break;
+                }
+            }
+        }
+
+        return(
+            <div onClick={this.handleCollapse} id={this.generateKey(key + '_' + value[0] + '_' + index)} key={this.generateKey(key + '_' + value[0] + '_' + index, true)} className={className}>
+                <div className="treeRoot">
+                    {typeof key === 'string' && isNaN(key) ?
+                        <span className="treeRoot__hasKey">{key}: </span> : null
+                    }
+                    <span>{value}</span>
+                </div>
+            </div>
+        );
+    }
+
+    getNodes = (object) => {
         return Object
             .entries(object)
             .map(([key, value], index) => value && typeof value === 'object'
                 ? this.getParentNode(key, value, index)
-                : (
-                    <div onClick={this.handleCollapse} id={this.generateKey(key + '_' + value[0] + '_' + index)} key={this.generateKey(key + '_' + value[0] + '_' + index, true)} className="hasChildren lastNode">
-                        <div className="treeRoot">
-                            {typeof key === 'string' && isNaN(key) ?
-                                <span className="treeRoot__hasKey">{key}: </span> : null
-                            }
-                            <span>{value}</span>
-                        </div>
-                    </div>
-                )
+                : this.getChildNode(key, value, index)
             );
     }
 
@@ -74,7 +94,7 @@ class TreeRoot extends Component {
         const { data } = this.props;
 
         if(data){
-            let nodes = this.getNodes(this.props.data);
+            let nodes = this.getNodes(data);
             return nodes;
         }
         return null;
