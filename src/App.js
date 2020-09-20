@@ -23,7 +23,7 @@ const handleFilterChange = (e, state, actions) => {
   }
 }
 
-const handleUploadChange = (e, actions) => { 
+const handleUploadChange = (e, actions) => { console.log('fs => ', fse);
   actions.setLoading(true);
   const files = e.target.files;   
   if (files.length <= 0) {
@@ -39,6 +39,11 @@ const handleUploadChange = (e, actions) => {
     fr.onload = (e) => {
       const result = JSON.parse(e.target.result);
       actions.loadJson(result);
+      actions.error(false);
+      actions.setLoading(false);
+    }
+    fr.onerror = (e) => { console.log(e);
+      actions.loadJson({error: e});
       actions.error(false);
       actions.setLoading(false);
     }
