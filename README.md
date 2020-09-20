@@ -4,7 +4,7 @@ This project's goal is to create a solution that allows you to query a JSON obje
 using the JSONPath with an instant and beautiful visualization.
 
 
-## Preview the project here:
+## Live Preview
 
 https://competent-tesla-47d8a3.netlify.app/
 
