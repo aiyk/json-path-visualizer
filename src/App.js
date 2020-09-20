@@ -23,7 +23,7 @@ const handleFilterChange = (e, state, actions) => {
   }
 }
 
-const handleUploadChange = (e, actions) => { console.log('fs => ', fse);
+const handleUploadChange = (e, actions) => {
   actions.setLoading(true);
   const files = e.target.files;   
   if (files.length <= 0) {
