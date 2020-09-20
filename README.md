@@ -1,4 +1,14 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Describtion
+
+This project's goal is to create a solution that allows you to query a JSON object
+using the JSONPath with an instant and beautiful visualization.
+
+
+## Preview the project here:
+
+https://competent-tesla-47d8a3.netlify.app/
+
+
 
 ## Available Scripts
 
