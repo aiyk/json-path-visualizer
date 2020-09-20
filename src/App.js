@@ -1,109 +1,89 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.scss';
 import { FaUpload } from 'react-icons/fa';
 import TreeRoot from './tree-root/tree-root'
 import {JSONPath} from 'jsonpath-plus';
+import { useOvermind } from './state'
 
-class App extends Component {
-  state = {
-    data: null,
-    selectedValues: null,
-    isLoading: false,
-    error: false
-  }
-
-  handleFilterChange = (e) => {
-    // this.setState({isLoading: true});
+const handleFilterChange = (e, state, actions) => {
+  if(state.data){
     let timer;
-      let _self = this;
-      const val = e.target.value;
-      let selectedValues = [];
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        JSONPath({path: val.trim(), json: _self.state.data, callback: (val, key, payload)=> {
-          selectedValues.push({
-            key: key,
-            value: val
-          })
-        }});
-        _self.setState({selectedValues: selectedValues});
-      }, 1000);
-    // this.setState({isLoading: false});
+    const val = e.target.value;
+    let selected = [];
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      JSONPath({path: val.trim(), json: state.data, callback: (val, key, payload)=> {
+        selected.push({
+          key: payload.parentProperty,
+          value: val,
+        })
+      }});
+      actions.selectedValuesUpdate(selected);
+    }, 1000);
+  }
+}
+
+const handleUploadChange = (e, actions) => { 
+  actions.setLoading(true);
+  const files = e.target.files;   
+  if (files.length <= 0) {
+    actions.setLoading(false);
+    return false;
   }
 
-  handleUploadChange = (e) => { 
-    this.setState({isLoading: true});
-    const files = e.target.files;   
-    if (files.length <= 0) {
-      this.setState({isLoading: false});
-      return false;
+  const ext = 'json'
+  const fileName = files[0].name;
+  let file_ext = fileName.split('.');
+  if (file_ext[file_ext.length - 1].toLowerCase() === ext.toLowerCase()) {
+    const fr = new FileReader();
+    fr.onload = (e) => {
+      const result = JSON.parse(e.target.result);
+      actions.loadJson(result);
+      actions.error(false);
+      actions.setLoading(false);
     }
+    fr.readAsText(files.item(0));
+  } else {
+    actions.setLoading(false);
+    actions.error(true);
 
-    const ext = 'json'
-    const fileName = files[0].name;
-    let file_ext = fileName.split('.');
-    if (file_ext[file_ext.length - 1].toLowerCase() === ext.toLowerCase()) {
-      const fr = new FileReader();
-      fr.onload = (e) => {
-        const result = JSON.parse(e.target.result);
-        this.setState({
-          data: result,
-          isLoading: false,
-          error: false
-        });
+    let timer;
+    clearTimeout(timer);
+    timer = setTimeout(() => { actions.reset() }, 4000);
+    
+  }
+}
+
+const isLoading = (actions, loadingState) => {
+  actions.isLoading(loadingState)
+}
+
+const App = () => {
+  const state = useOvermind().state;
+  const actions = useOvermind().actions;
+
+  return (
+    <div className="jsonRenderer">
+      {state.error?
+        <div className="jsonRenderer__error">
+          <div className="jsonRenderer__error__title">Wrong file format</div>
+          kindly upload a json file instead!
+        </div> : null
       }
-      fr.readAsText(files.item(0));
-    } else {
-      this.setState({
-        data: null,
-        isLoading: false,
-        error: true
-      });
 
-      let timer;
-      let _self = this;
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        _self.setState({
-          data: null,
-          isLoading: false,
-          error: false
-        });
-      }, 4000);
-      
-    }
-  }
+      {state.isLoading ? <div className="loader"></div> : null}
 
-  isLoading = (state) => {
-    this.setState({
-      isLoading: state
-    });
-  }
-
-  render(){
-    return (
-      <div className="jsonRenderer">
-        {this.state.error?
-          <div className="jsonRenderer__error">
-            <div className="jsonRenderer__error__title">Wrong file format</div>
-            kindly upload a json file instead!
-          </div> : null
-        }
-
-        {this.state.isLoading ? <div className="loader"></div> : null}
-
-        <input type="text" onChange={this.handleFilterChange} className="jsonRenderer__filter" placeholder="type in your query..." />
-        <div className="jsonRenderer__contentArea nice nice-scroll">
-          <TreeRoot isLoading={this.isLoading} selectedValues={this.state.selectedValues} data={this.state.data} />
-        </div>
-
-        <label className="jsonRenderer__uploadBtn">
-          <input onChange={this.handleUploadChange} type="file" required/>
-          <span><FaUpload className="inline-icon" /> Upload File</span>
-        </label>
+      <input type="text" onChange={(e) => {handleFilterChange(e, state, actions)}} className="jsonRenderer__filter" placeholder="type in your query..." />
+      <div className="jsonRenderer__contentArea nice nice-scroll">
+        <TreeRoot selectedValues={state.selectedValues} data={state.data} />
       </div>
-    );
-  }
+
+      <label className="jsonRenderer__uploadBtn">
+        <input onChange={(e) => {handleUploadChange(e, actions)}} type="file" required/>
+        <span><FaUpload className="inline-icon" /> Upload File</span>
+      </label>
+    </div>
+  );
 }
 
 export default App;
