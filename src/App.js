@@ -54,10 +54,6 @@ const handleUploadChange = (e, actions) => {
   }
 }
 
-const isLoading = (actions, loadingState) => {
-  actions.isLoading(loadingState)
-}
-
 const App = () => {
   const state = useOvermind().state;
   const actions = useOvermind().actions;

@@ -1,11 +1,5 @@
 import { IConfig } from 'overmind'
-import { 
-    createHook, 
-    createStateHook, 
-    createActionsHook, 
-    createEffectsHook, 
-    createReactionHook 
-} from 'overmind-react'
+import { createHook } from 'overmind-react'
 
 interface IState {
     data: any,
@@ -45,7 +39,7 @@ const actions = {
     },
 
     // set loading state
-    selectedValuesUpdate : ({ state }: any, selectedValues: any) => {
+    selectedValuesUpdate : ({ state }: any, selectedValues: any[]) => {
         state.selectedValues = selectedValues;
     },
 
@@ -56,10 +50,7 @@ const actions = {
 }
 
 // configuration object
-export const config = {
-  state,
-  actions
-}
+export const config = { state, actions }
 
 declare module 'overmind' {
   interface Config extends IConfig<typeof config> {}
@@ -67,8 +58,3 @@ declare module 'overmind' {
 
 // hook to get access in our components
 export const useOvermind = createHook<typeof config>()
-
-export const useState = createStateHook<typeof config>()
-export const useActions = createActionsHook<typeof config>()
-export const useEffects = createEffectsHook<typeof config>()
-export const useReaction = createReactionHook<typeof config>()
