@@ -7,7 +7,7 @@ import './index.css';
 import App from './App';
 
 const overmind = createOvermind(config, {
-  devtools: "localhost:3031"
+  devtools: "localhost:3000"
 });
 
 ReactDOM.render((
